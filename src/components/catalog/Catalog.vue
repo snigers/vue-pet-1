@@ -1,19 +1,29 @@
 <script setup lang="ts">
-import {reactive} from "vue";
+import styles from './Catalog.module.scss'
+import {useCatalog} from "@/components/catalog/useCatalog";
+import {defineProps} from "vue";
 
-const state: { posts: IPost[] } = reactive({
-  posts: [
-    {
-      id: 1,
-      userID: 1,
-      title: 'sunt aut facere repellat provident occaecati excepturi optio reprehenderit',
-      body: 'quia et suscipit\\nsuscipit recusandae consequuntur expedita et cum\\nreprehenderit molestiae ut ut quas totam\\nnostrum rerum est autem sunt rem eveniet architecto'
-    }
-  ]
-})
+const props = defineProps<{
+  title: string
+}>()
 
+const { posts, addPost, removePost, value, errorMessage} = useCatalog(props)
 </script>
 
 <template>
-  <div>Catalog</div>
+  <div :class="styles.wrapper">
+    <h1>Add posts</h1>
+    <form>
+      <input v-model="value" placeholder="Enter post title" type="text" />
+      <div v-if="errorMessage">{{errorMessage}}</div>
+      <button @click.prevent="addPost">Add</button>
+    </form>
+    <div v-if="!posts.length">Posts not found!</div>
+    <ul>
+      <li :key="post.id" v-for="post in posts">
+        <span>{{post.id}} - {{post.title}}</span>
+        <button @click="removePost(post.id)">X</button>
+      </li>
+    </ul>
+  </div>
 </template>
