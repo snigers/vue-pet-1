@@ -1,11 +1,11 @@
 import type { IPost } from '@/components/catalog/catalog.interface'
+
 import { useField } from 'vee-validate'
 import { reactive, toRef } from 'vue'
 
-export const useCatalog = (props: Readonly<{ title: string }>) => {
+export const useCatalogForm = (props: Readonly<{ title: string }>) => {
 	const isRequired = (value: unknown) =>
 		!!(value && (value as string).trim()) || 'This is required'
-
 	const titleRef = toRef(props, 'title')
 	const { errorMessage, value } = useField<string>(titleRef, isRequired)
 
@@ -36,7 +36,8 @@ export const useCatalog = (props: Readonly<{ title: string }>) => {
 	}
 
 	return {
-		posts: state.posts,
+		posts: [],
+		// isLoading,
 		value,
 		addPost,
 		removePost,
